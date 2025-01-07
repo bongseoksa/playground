@@ -34,3 +34,10 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## References
+
+- [BabylonJS and ReactJS](https://doc.babylonjs.com/communityExtensions/Babylon.js+ExternalLibraries/BabylonJS_and_ReactJS/)
+- [Udemy - Create 3D Javascript Game](https://www.udemy.com/course/learn-babylon-js-by-making-a-game/?couponCode=NEWYEARCAREER)
+- [Mixamo - 3D Models & Animations](https://www.mixamo.com/#/?page=1&type=Character)
+- [Blender - 3D Editor](https://www.blender.org/)
