@@ -24,6 +24,7 @@ function CanvasView({
   useEffect(() => {
     const { current: canvas } = ref;
     if (!canvas) return;
+    console.log("A");
 
     const engine = new Engine(
       canvas,
@@ -34,7 +35,7 @@ function CanvasView({
     const scene = new Scene(engine, sceneOptions);
 
     if (scene.isReady()) {
-      onSceneReady(scene);
+      // onSceneReady(scene);
     } else {
       scene.onReadyObservable.addOnce((scene) => onSceneReady(scene));
     }
