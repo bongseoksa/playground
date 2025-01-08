@@ -6,6 +6,8 @@ import {
   HemisphericLight,
   MeshBuilder,
   Scene,
+  StandardMaterial,
+  Texture,
   TransformNode,
   Vector3,
 } from "@babylonjs/core";
@@ -19,7 +21,8 @@ export default function Home() {
   const camHorizontalAxis = useRef(0);
 
   /** 씬 화면 초기화 */
-  const onSceneReady = useCallback(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const onSceneReady = () => {
     if (!engineRef.current || !sceneRef.current) return;
     const { current: engine } = engineRef;
     const { current: scene } = sceneRef;
@@ -33,6 +36,11 @@ export default function Home() {
       { width: 50, height: 50 },
       scene
     );
+
+    const groundMat = new StandardMaterial("groundMat", scene);
+    const diffuseTex = new Texture("/textures/groundTexDiffuse.jpg", scene);
+    groundMat.diffuseTexture = diffuseTex;
+    ground.material = groundMat;
 
     const box = MeshBuilder.CreateBox("box", { size: 1.5 }, scene);
     box.position.set(0, -1, 0);
@@ -49,7 +57,7 @@ export default function Home() {
     cam.parent = camContainer;
     cam.setTarget(ground.position);
     camContainerRef.current = camContainer;
-  }, []);
+  };
 
   /** 엔진, 씬 생성 */
   const initScene = useCallback(() => {

@@ -41,3 +41,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - [Udemy - Create 3D Javascript Game](https://www.udemy.com/course/learn-babylon-js-by-making-a-game/?couponCode=NEWYEARCAREER)
 - [Mixamo - 3D Models & Animations](https://www.mixamo.com/#/?page=1&type=Character)
 - [Blender - 3D Editor](https://www.blender.org/)
+- [Poly Haven - Materials](https://polyhaven.com/textures/terrain)
