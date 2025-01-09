@@ -92,12 +92,25 @@ export default function Home() {
     createGround();
     createCharacter();
 
+    const camSpeed = 3;
     const cam = new FreeCamera("mainCam", new Vector3(0, 0, -5), scene);
     const camContainer = new TransformNode("cameraContainer", scene);
     camContainer.position = new Vector3(0, 15, 0);
     cam.parent = camContainer;
     cam.setTarget(new Vector3(0, -10, 0));
     camContainerRef.current = camContainer;
+    scene.registerAfterRender(() => {
+      if (camContainerRef.current) {
+        camContainerRef.current.locallyTranslate(
+          new Vector3(
+            (camHorizontalAxis.current * camSpeed * engine.getDeltaTime()) /
+              1000,
+            0,
+            (camVerticalAxis.current * camSpeed * engine.getDeltaTime()) / 1000
+          )
+        );
+      }
+    });
   };
 
   /** 엔진, 씬 생성 */
@@ -131,17 +144,10 @@ export default function Home() {
       if (theKey === "arrowdown") camVerticalAxis.current = -1;
       if (theKey === "arrowleft") camHorizontalAxis.current = -1;
       if (theKey === "arrowright") camHorizontalAxis.current = 1;
-
-      if (camContainerRef.current) {
-        camContainerRef.current.locallyTranslate(
-          new Vector3(camHorizontalAxis.current, 0, camVerticalAxis.current)
-        );
-      }
     };
 
     const keyUpHandler = (e: KeyboardEvent) => {
       const theKey = e.key.toLowerCase();
-      console.log("keyUpHandler", theKey);
       if (theKey === "arrowup") camVerticalAxis.current = 0;
       if (theKey === "arrowdown") camVerticalAxis.current = 0;
       if (theKey === "arrowleft") camHorizontalAxis.current = 0;
