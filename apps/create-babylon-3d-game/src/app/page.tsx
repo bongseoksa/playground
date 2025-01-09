@@ -71,6 +71,16 @@ export default function Home() {
     );
   };
 
+  const stop = () => {
+    if (!modelRef.current) return;
+
+    directionPosRef.current = null;
+    const { current: model } = modelRef;
+    model.animationGroups.forEach((anim) =>
+      anim.name === "idle" ? anim.play(true) : anim.stop()
+    );
+  };
+
   const createCharacter = async () => {
     if (!engineRef.current || !sceneRef.current) return;
     const { current: scene } = sceneRef;
@@ -146,6 +156,15 @@ export default function Home() {
         characterboxRef.current.locallyTranslate(
           new Vector3(0, 0, (3 * engine.getDeltaTime()) / 1000)
         );
+
+        if (
+          Vector3.Distance(
+            characterboxRef.current.position,
+            directionPosRef.current
+          ) <= 1.1
+        ) {
+          stop();
+        }
       }
     });
 
