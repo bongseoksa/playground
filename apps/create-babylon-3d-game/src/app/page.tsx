@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import "@babylonjs/loaders"; // SceneLoader를 통해 모델로드시 필요
 import {
   AnimationGroup,
@@ -7,7 +7,13 @@ import {
   Engine,
   FreeCamera,
   HemisphericLight,
+  IPointerEvent,
+  ISceneLoaderAsyncResult,
+  Mesh,
   MeshBuilder,
+  Nullable,
+  PickingInfo,
+  PointerEventTypes,
   Scene,
   SceneLoader,
   StandardMaterial,
@@ -23,6 +29,9 @@ export default function Home() {
   const camContainerRef = useRef<TransformNode | null>(null);
   const camVerticalAxis = useRef(0);
   const camHorizontalAxis = useRef(0);
+  const characterboxRef = useRef<Mesh | null>(null);
+  const modelRef = useRef<ISceneLoaderAsyncResult | null>(null);
+  const directionPosRef = useRef<Vector3 | null>(null);
 
   const createGround = () => {
     if (!engineRef.current || !sceneRef.current) return;
@@ -49,17 +58,42 @@ export default function Home() {
     ground.material = groundMat;
   };
 
+  const move = (directionPos: Nullable<Vector3>) => {
+    if (!characterboxRef.current || !directionPos || !modelRef.current) return;
+    directionPosRef.current = directionPos;
+
+    const { current: box } = characterboxRef;
+    const { current: model } = modelRef;
+    const { x, z } = directionPos;
+    box.lookAt(new Vector3(x, box.position.y, z));
+    model.animationGroups.forEach((anim) =>
+      anim.name === "running" ? anim.play(true) : anim.stop()
+    );
+  };
+
   const createCharacter = async () => {
     if (!engineRef.current || !sceneRef.current) return;
     const { current: scene } = sceneRef;
     try {
+      const modelBox = MeshBuilder.CreateBox(
+        "characterBox",
+        { width: 1, height: 2 },
+        scene
+      );
+      modelBox.position.y = 1;
+      modelBox.visibility = 0.5;
+      characterboxRef.current = modelBox;
+
       const model = await SceneLoader.ImportMeshAsync(
         "",
         "/models/",
         "character.glb",
         scene
       );
-      console.log("MODEL", model);
+      modelRef.current = model;
+      const rootMesh = model.meshes[0];
+      rootMesh.parent = modelBox;
+      rootMesh.position.y = -1;
 
       model.animationGroups.forEach((anim: AnimationGroup) =>
         anim.name === "idle" ? anim.play(true) : anim.stop()
@@ -93,11 +127,8 @@ export default function Home() {
     createCharacter();
 
     const camSpeed = 3;
-    const cam = new FreeCamera("mainCam", new Vector3(0, 0, -5), scene);
     const camContainer = new TransformNode("cameraContainer", scene);
     camContainer.position = new Vector3(0, 15, 0);
-    cam.parent = camContainer;
-    cam.setTarget(new Vector3(0, -10, 0));
     camContainerRef.current = camContainer;
     scene.registerAfterRender(() => {
       if (camContainerRef.current) {
@@ -110,7 +141,17 @@ export default function Home() {
           )
         );
       }
+
+      if (characterboxRef.current && directionPosRef.current) {
+        characterboxRef.current.locallyTranslate(
+          new Vector3(0, 0, (3 * engine.getDeltaTime()) / 1000)
+        );
+      }
     });
+
+    const cam = new FreeCamera("mainCam", new Vector3(0, 0, -5), scene);
+    cam.parent = camContainer;
+    cam.setTarget(new Vector3(0, -10, 0));
   };
 
   /** 엔진, 씬 생성 */
@@ -122,6 +163,16 @@ export default function Home() {
 
     const scene = new Scene(engine);
     sceneRef.current = scene;
+    scene.onPointerDown = (
+      evt: IPointerEvent,
+      pickInfo: PickingInfo,
+      type: PointerEventTypes
+    ) => {
+      if (pickInfo.pickedMesh?.name === "ground") {
+        move(pickInfo.pickedPoint);
+      }
+    };
+
     if (scene.isReady()) {
       onSceneReady();
     } else {
