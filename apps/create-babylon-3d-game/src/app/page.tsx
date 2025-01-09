@@ -21,16 +21,9 @@ export default function Home() {
   const camVerticalAxis = useRef(0);
   const camHorizontalAxis = useRef(0);
 
-  /** 씬 화면 초기화 */
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const onSceneReady = () => {
+  const createGround = () => {
     if (!engineRef.current || !sceneRef.current) return;
-    const { current: engine } = engineRef;
     const { current: scene } = sceneRef;
-
-    engine.runRenderLoop(() => {
-      scene.render();
-    });
 
     const ground = MeshBuilder.CreateGround(
       "ground",
@@ -51,6 +44,18 @@ export default function Home() {
     groundMat.bumpTexture = normalTex;
     groundMat.specularColor = new Color3(0, 0, 0);
     ground.material = groundMat;
+  };
+
+  /** 씬 화면 초기화 */
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const onSceneReady = () => {
+    if (!engineRef.current || !sceneRef.current) return;
+    const { current: engine } = engineRef;
+    const { current: scene } = sceneRef;
+
+    engine.runRenderLoop(() => {
+      scene.render();
+    });
 
     const box = MeshBuilder.CreateBox("box", { size: 1.5 }, scene);
     box.position.set(0, 1, 0);
@@ -60,6 +65,8 @@ export default function Home() {
       new Vector3(0, 20, 0),
       scene
     );
+
+    createGround();
 
     const cam = new FreeCamera("mainCam", new Vector3(0, 0, -5), scene);
     const camContainer = new TransformNode("cameraContainer", scene);
