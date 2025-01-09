@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  Color3,
   Engine,
   FreeCamera,
   HemisphericLight,
@@ -39,23 +40,32 @@ export default function Home() {
 
     const groundMat = new StandardMaterial("groundMat", scene);
     const diffuseTex = new Texture("/textures/groundTexDiffuse.jpg", scene);
+    const normalTex = new Texture("/textures/groundTexNormal.jpg", scene);
+
+    diffuseTex.uScale = 10;
+    diffuseTex.vScale = 10;
+    normalTex.uScale = 10;
+    normalTex.vScale = 10;
+
     groundMat.diffuseTexture = diffuseTex;
+    groundMat.bumpTexture = normalTex;
+    groundMat.specularColor = new Color3(0, 0, 0);
     ground.material = groundMat;
 
     const box = MeshBuilder.CreateBox("box", { size: 1.5 }, scene);
-    box.position.set(0, -1, 0);
+    box.position.set(0, 1, 0);
 
     const light = new HemisphericLight(
       "mainLight",
-      new Vector3(0, 10, 0),
+      new Vector3(0, 20, 0),
       scene
     );
 
-    const cam = new FreeCamera("mainCam", new Vector3(0, 5, -10), scene);
+    const cam = new FreeCamera("mainCam", new Vector3(0, 0, -5), scene);
     const camContainer = new TransformNode("cameraContainer", scene);
     camContainer.position = new Vector3(0, 15, 0);
     cam.parent = camContainer;
-    cam.setTarget(ground.position);
+    cam.setTarget(new Vector3(0, -10, 0));
     camContainerRef.current = camContainer;
   };
 
