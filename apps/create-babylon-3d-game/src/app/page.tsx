@@ -1,12 +1,15 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
+import "@babylonjs/loaders"; // SceneLoader를 통해 모델로드시 필요
 import {
+  AnimationGroup,
   Color3,
   Engine,
   FreeCamera,
   HemisphericLight,
   MeshBuilder,
   Scene,
+  SceneLoader,
   StandardMaterial,
   Texture,
   TransformNode,
@@ -46,9 +49,29 @@ export default function Home() {
     ground.material = groundMat;
   };
 
+  const createCharacter = async () => {
+    if (!engineRef.current || !sceneRef.current) return;
+    const { current: scene } = sceneRef;
+    try {
+      const model = await SceneLoader.ImportMeshAsync(
+        "",
+        "/models/",
+        "character.glb",
+        scene
+      );
+      console.log("MODEL", model);
+
+      model.animationGroups.forEach((anim: AnimationGroup) =>
+        anim.name === "idle" ? anim.play(true) : anim.stop()
+      );
+    } catch (error) {
+      console.error("모델 로드 실패:", error);
+    }
+  };
+
   /** 씬 화면 초기화 */
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const onSceneReady = () => {
+  const onSceneReady = async () => {
     if (!engineRef.current || !sceneRef.current) return;
     const { current: engine } = engineRef;
     const { current: scene } = sceneRef;
@@ -57,8 +80,8 @@ export default function Home() {
       scene.render();
     });
 
-    const box = MeshBuilder.CreateBox("box", { size: 1.5 }, scene);
-    box.position.set(0, 1, 0);
+    // const box = MeshBuilder.CreateBox("box", { size: 1.5 }, scene);
+    // box.position.set(0, 1, 0);
 
     const light = new HemisphericLight(
       "mainLight",
@@ -67,6 +90,7 @@ export default function Home() {
     );
 
     createGround();
+    createCharacter();
 
     const cam = new FreeCamera("mainCam", new Vector3(0, 0, -5), scene);
     const camContainer = new TransformNode("cameraContainer", scene);
