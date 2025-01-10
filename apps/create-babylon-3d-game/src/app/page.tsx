@@ -34,7 +34,7 @@ export default function Home() {
   const directionPosRef = useRef<Vector3 | null>(null);
 
   const createGround = () => {
-    if (!engineRef.current || !sceneRef.current) return;
+    if (!sceneRef.current) return;
     const { current: scene } = sceneRef;
 
     const ground = MeshBuilder.CreateGround(
@@ -56,6 +56,52 @@ export default function Home() {
     groundMat.bumpTexture = normalTex;
     groundMat.specularColor = new Color3(0, 0, 0);
     ground.material = groundMat;
+  };
+
+  const createTrees = async () => {
+    if (!sceneRef.current) return;
+    const { current: scene } = sceneRef;
+
+    const treeBoxPivot = new Vector3(0, -1, 0);
+    const originTreeBox = MeshBuilder.CreateBox(
+      "treeBox",
+      { width: 0.5, height: 2, depth: 0.5 },
+      scene
+    );
+    originTreeBox.position.y = 1;
+    originTreeBox.visibility = 0.5;
+    originTreeBox.setPivotPoint(treeBoxPivot);
+    originTreeBox.setEnabled(false);
+
+    const model = await SceneLoader.ImportMeshAsync(
+      "",
+      "/models/",
+      "tree.glb",
+      scene
+    );
+    modelRef.current = model;
+    const rootMesh = model.meshes[0];
+    rootMesh.parent = originTreeBox;
+    rootMesh.position = Vector3.Zero();
+
+    for (let i = 0; i < 15; i++) {
+      const randomScale = Math.random() * 3 + 1;
+      const treeBox = originTreeBox.clone();
+
+      treeBox.position = new Vector3(
+        Math.random() * 50 - 25,
+        treeBox.position.y,
+        Math.random() * 50 - 25
+      );
+      treeBox.setPivotPoint(treeBoxPivot);
+      treeBox.scaling = new Vector3(randomScale, randomScale, randomScale);
+      treeBox.setEnabled(true);
+    }
+  };
+
+  const createPlayGround = async () => {
+    createGround();
+    await createTrees();
   };
 
   const move = (directionPos: Nullable<Vector3>) => {
@@ -82,7 +128,7 @@ export default function Home() {
   };
 
   const createCharacter = async () => {
-    if (!engineRef.current || !sceneRef.current) return;
+    if (!sceneRef.current) return;
     const { current: scene } = sceneRef;
     try {
       const modelBox = MeshBuilder.CreateBox(
@@ -133,7 +179,7 @@ export default function Home() {
       scene
     );
 
-    createGround();
+    createPlayGround();
     createCharacter();
 
     const camSpeed = 3;
@@ -171,6 +217,7 @@ export default function Home() {
     const cam = new FreeCamera("mainCam", new Vector3(0, 0, -5), scene);
     cam.parent = camContainer;
     cam.setTarget(new Vector3(0, -10, 0));
+    cam.attachControl();
   };
 
   /** 엔진, 씬 생성 */
