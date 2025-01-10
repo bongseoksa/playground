@@ -20,6 +20,15 @@ importers:
 
   apps/create-babylon-3d-game:
     dependencies:
+      '@babylonjs/core':
+        specifier: ^7.42.0
+        version: 7.43.0
+      '@babylonjs/gui':
+        specifier: ^7.43.0
+        version: 7.43.0(@babylonjs/core@7.43.0)
+      '@babylonjs/loaders':
+        specifier: ^7.42.0
+        version: 7.43.0(@babylonjs/core@7.43.0)(babylonjs-gltf2interface@7.43.0)
       next:
         specifier: 15.1.3
         version: 15.1.3(react-dom@19.0.0)(react@19.0.0)
@@ -209,6 +218,28 @@ packages:
       core-js-pure: 3.39.0
       regenerator-runtime: 0.14.1
     dev: true
+
+  /@babylonjs/core@7.43.0:
+    resolution: {integrity: sha512-IgIHoju3kprOyJJzKa/3LcprYffl35LVFW55IWGSeZ0hOVnAdUkjDXuGVGue31PKmjVI/uonpsR0nJ4ZHHI4UQ==}
+    dev: false
+
+  /@babylonjs/gui@7.43.0(@babylonjs/core@7.43.0):
+    resolution: {integrity: sha512-P6dyGtUW3Iblr+o7NXK/z2gbByANJ9K3MFMAQTKAODIcdsu+UtzaPTpGvd9lhEph9ih3/B6Myz/u7677IZ8Sqw==}
+    peerDependencies:
+      '@babylonjs/core': ^7.0.0
+    dependencies:
+      '@babylonjs/core': 7.43.0
+    dev: false
+
+  /@babylonjs/loaders@7.43.0(@babylonjs/core@7.43.0)(babylonjs-gltf2interface@7.43.0):
+    resolution: {integrity: sha512-NUPluqw+LmFabr+sbmMa2baaVyZ7CfQmuK+4y+M3i47mqlayvWpN62U66ccLrIhrwN9EGbGmdQqKyrQ3hZ3xTA==}
+    peerDependencies:
+      '@babylonjs/core': ^7.0.0
+      babylonjs-gltf2interface: ^7.0.0
+    dependencies:
+      '@babylonjs/core': 7.43.0
+      babylonjs-gltf2interface: 7.43.0
+    dev: false
 
   /@cspotcode/source-map-support@0.8.1:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -1177,6 +1208,10 @@ packages:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
     engines: {node: '>= 0.4'}
     dev: true
+
+  /babylonjs-gltf2interface@7.43.0:
+    resolution: {integrity: sha512-/I8nyrsEV7ihpiuqNadT9eZxVLdfnIL5wTGovotmoMCUScR+5/Ibm31gD/U2ND8W0JfQxGKEI+aUETlfOceJ1w==}
+    dev: false
 
   /balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
