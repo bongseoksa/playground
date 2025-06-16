@@ -1,3 +1,11 @@
+# What is this Project
+
+특정 프로젝트를 정의하지 않고 자유롭게 개발해보기 위해 생성되었습니다.
+
+- apps/create-babylon-3d-game : 바빌론js를 활용한 튜토리얼 작업
+- apps/d3 : d3.js를 활용한 튜토리얼얼
+
+
 # Turborepo starter
 
 This is an official starter Turborepo.

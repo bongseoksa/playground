@@ -8,5 +8,11 @@ First, run the development server:
 pnpm dev
 ```
 
+## Install d3 library
+
+```bash
+pnpm add d3 @types/d3
+```
+
 ## 참고
 [D3.js 공식 사이트](https://d3js.org/getting-started)
