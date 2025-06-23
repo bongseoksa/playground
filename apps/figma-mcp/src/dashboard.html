@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Figma MCP 대시보드</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --bg: #f9fafb;
+      --sidebar-bg: #fff;
+      --card-bg: #fff;
+      --border: #e5e7eb;
+      --text-main: #222;
+      --text-muted: #94a3b8;
+      --radius: 14px;
+      --shadow: 0 2px 12px rgba(37,99,235,0.06);
+    }
+    body {
+      margin: 0;
+      font-family: 'Pretendard', 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+    }
+    .header {
+      height: 54px;
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 36px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      box-shadow: 0 1px 0 var(--border);
+    }
+    .container {
+      display: flex;
+      height: calc(100vh - 54px);
+    }
+    .sidebar {
+      width: 72px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 0;
+      gap: 24px;
+    }
+    .sidebar .icon {
+      width: 32px;
+      height: 32px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+    .sidebar .icon.selected, .sidebar .icon:hover {
+      background: #eef2ff;
+    }
+    .sidebar .icon svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--primary);
+    }
+    .main {
+      flex: 1;
+      padding: 48px 56px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .cards {
+      display: flex;
+      gap: 32px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px 24px 28px;
+      min-width: 180px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+      transition: box-shadow 0.2s, border 0.2s;
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin: 0;
+      letter-spacing: -0.5px;
+    }
+    .card-value {
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0;
+      letter-spacing: -1px;
+    }
+    @media (max-width: 900px) {
+      .main { padding: 24px 8px; }
+      .cards { flex-direction: column; gap: 16px; }
+      .sidebar { width: 56px; padding: 16px 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">Figma MCP 대시보드</div>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="icon selected" title="메인">
+        <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/></svg>
+      </div>
+      <div class="icon" title="통계">
+        <svg viewBox="0 0 24 24"><path d="M6 20V10M12 20V4M18 20V14" stroke-width="2" stroke="currentColor" fill="none"/></svg>
+      </div>
+      <div class="icon" title="설정">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09A1.65 1.65 0 0 0 9 3.09V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      </div>
+    </nav>
+    <main class="main">
+      <div class="cards">
+        <div class="card">
+          <div class="card-title">사용자 수</div>
+          <div class="card-value">1234</div>
+        </div>
+        <div class="card">
+          <div class="card-title">활성 세션</div>
+          <div class="card-value">56</div>
+        </div>
+        <div class="card">
+          <div class="card-title">에러 수</div>
+          <div class="card-value">2</div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html> 
